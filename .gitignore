@@ -1,0 +1,48 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+*.test
+
+# Output of the go build command
+*.out
+
+# Go workspace file
+go.work
+
+# Go build cache and modules
+bin/
+vendor/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Go coverage files
+*.cover
+*.cov
+coverage.*
+
+# go tool cache
+*.prof
+*.pprof
+
+# Dependency directories (if using tools like dep or glide)
+vendor/
+
+# If you use GoReleaser
+dist/
+
+# If you use Docker
+*.env
+.env.*
