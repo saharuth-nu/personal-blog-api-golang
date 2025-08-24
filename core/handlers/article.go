@@ -3,6 +3,7 @@ package handlers
 import (
 	"blog-api/core/models"
 	"blog-api/core/services"
+	"blog-api/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -19,10 +20,12 @@ func (h articleHandler) GetArticles(c *fiber.Ctx) error {
 
 	response, err := h.articleSrv.GetArticles()
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
+		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.Status(fiber.StatusOK).JSON(response)
+	// return c.Status(fiber.StatusOK).JSON(response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "", response)
 }
 
 func (h articleHandler) GetArticleByUID(c *fiber.Ctx) error {
@@ -31,15 +34,18 @@ func (h articleHandler) GetArticleByUID(c *fiber.Ctx) error {
 		UID string `params:"uid"`
 	}{}
 	if err := c.ParamsParser(&param); err != nil {
-		return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		// return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		return utils.ParamParserFail(c)
 	}
 
 	response, err := h.articleSrv.GetArticleByUID(param.UID)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.Status(fiber.StatusOK).JSON(response)
+	// return c.Status(fiber.StatusOK).JSON(response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "", response)
 }
 
 func (h articleHandler) CreateArticle(c *fiber.Ctx) error {
@@ -47,7 +53,8 @@ func (h articleHandler) CreateArticle(c *fiber.Ctx) error {
 	b := new(models.NewArticleRequest)
 
 	if err := c.BodyParser(b); err != nil {
-		return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		// return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		return utils.BodyParserFail(c)
 	}
 
 	request := models.NewArticleRequest{
@@ -58,13 +65,12 @@ func (h articleHandler) CreateArticle(c *fiber.Ctx) error {
 
 	err := h.articleSrv.CreateArticle(request)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	response := make(map[string]any)
-	response["status"] = "success"
-
-	return c.Status(fiber.StatusCreated).JSON(response)
+	// return c.Status(fiber.StatusCreated).JSON(response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "", nil)
 }
 
 func (h articleHandler) DeleteArticleByUID(c *fiber.Ctx) error {
@@ -72,16 +78,19 @@ func (h articleHandler) DeleteArticleByUID(c *fiber.Ctx) error {
 		UID string `params:"uid"`
 	}{}
 	if err := c.ParamsParser(&param); err != nil {
-		return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		// return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		return utils.ParamParserFail(c)
 	}
 
 	err := h.articleSrv.DeleteArticleByUID(param.UID)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	response := make(map[string]any)
 	response["status"] = "success"
 
-	return c.Status(fiber.StatusOK).JSON(response)
+	// return c.Status(fiber.StatusOK).JSON(response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "", response)
 }
