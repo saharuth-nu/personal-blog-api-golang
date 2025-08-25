@@ -45,6 +45,7 @@ func main() {
 	apiV1.Get("/article/:uid", articleHandler.GetArticleByUID)
 	apiV1.Delete("/article/:uid", articleHandler.DeleteArticleByUID)
 	apiV1.Post("/article", articleHandler.CreateArticle)
+	apiV1.Put("/article/:uid", articleHandler.UpdateArticleByUID)
 
 	app.Listen(fmt.Sprintf(":%v", config.Env.Port))
 }

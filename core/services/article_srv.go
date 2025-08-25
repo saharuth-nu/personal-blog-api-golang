@@ -62,8 +62,8 @@ func (s articleService) GetArticleByUID(uid string) (*ArticleResponse, error) {
 
 func (s articleService) CreateArticle(request models.NewArticleRequest) error {
 
-	if request.Content == "" {
-		return errors.New("content is empty")
+	if request.Content == "" || request.Title == "" {
+		return errors.New("title or content is empty")
 	}
 
 	article := repositories.Article{
@@ -92,6 +92,28 @@ func (s articleService) DeleteArticleByUID(uid string) error {
 	}
 
 	if err := s.articleRepo.DeleteByUID(uid); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s articleService) UpdateArticleByUID(uid string, request models.NewArticleRequest) error {
+
+	if err := uuid.Validate(uid); err != nil {
+		return err
+	}
+
+	_, err := s.articleRepo.GetByUID(uid)
+	if err != nil {
+		return err
+	}
+
+	if request.Content == "" || request.Title == "" {
+		return errors.New("title or content is empty")
+	}
+
+	if err := s.articleRepo.UpdateByUID(uid, request); err != nil {
 		return err
 	}
 

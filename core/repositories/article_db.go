@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"blog-api/core/models"
+
 	"gorm.io/gorm"
 )
 
@@ -41,6 +43,15 @@ func (r articleRepositoryDB) Create(article Article) error {
 func (r articleRepositoryDB) DeleteByUID(uid string) error {
 	// soft delete
 	tx := r.db.Where("article_uid = ?", uid).Delete(&Article{})
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+
+func (r articleRepositoryDB) UpdateByUID(uid string, article models.NewArticleRequest) error {
+	// Update with struct
+	tx := r.db.Model(Article{}).Where("article_uid = ?", uid).Updates(article)
 	if tx.Error != nil {
 		return tx.Error
 	}

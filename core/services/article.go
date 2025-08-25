@@ -18,4 +18,5 @@ type ArticleService interface {
 	GetArticleByUID(string) (*ArticleResponse, error)
 	CreateArticle(models.NewArticleRequest) error
 	DeleteArticleByUID(string) error
+	UpdateArticleByUID(string, models.NewArticleRequest) error
 }

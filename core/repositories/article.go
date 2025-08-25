@@ -1,6 +1,10 @@
 package repositories
 
-import "gorm.io/gorm"
+import (
+	"blog-api/core/models"
+
+	"gorm.io/gorm"
+)
 
 type Article struct {
 	gorm.Model
@@ -15,4 +19,5 @@ type ArticleRepository interface {
 	GetByUID(string) (*Article, error)
 	Create(Article) error
 	DeleteByUID(string) error
+	UpdateByUID(string, models.NewArticleRequest) error
 }

@@ -70,7 +70,7 @@ func (h articleHandler) CreateArticle(c *fiber.Ctx) error {
 	}
 
 	// return c.Status(fiber.StatusCreated).JSON(response)
-	return utils.SuccessFormat(c, fiber.StatusOK, "", nil)
+	return utils.SuccessFormat(c, fiber.StatusOK, "success", nil)
 }
 
 func (h articleHandler) DeleteArticleByUID(c *fiber.Ctx) error {
@@ -88,9 +88,39 @@ func (h articleHandler) DeleteArticleByUID(c *fiber.Ctx) error {
 		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	response := make(map[string]any)
-	response["status"] = "success"
+	// return c.Status(fiber.StatusOK).JSON(response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "success", nil)
+}
+
+func (h articleHandler) UpdateArticleByUID(c *fiber.Ctx) error {
+	param := struct {
+		UID string `params:"uid"`
+	}{}
+	if err := c.ParamsParser(&param); err != nil {
+		// return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		return utils.ParamParserFail(c)
+	}
+
+	b := new(models.NewArticleRequest)
+
+	if err := c.BodyParser(b); err != nil {
+		// return fiber.NewError(fiber.ErrBadRequest.Code, err.Error())
+		return utils.BodyParserFail(c)
+	}
+
+	request := models.NewArticleRequest{
+		Title:   b.Title,
+		Content: b.Content,
+		Tag:     b.Tag,
+	}
+
+	err := h.articleSrv.UpdateArticleByUID(param.UID, request)
+	if err != nil {
+		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
+	}
 
 	// return c.Status(fiber.StatusOK).JSON(response)
-	return utils.SuccessFormat(c, fiber.StatusOK, "", response)
+	return utils.SuccessFormat(c, fiber.StatusOK, "success", nil)
+
 }
