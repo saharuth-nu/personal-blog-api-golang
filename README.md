@@ -2,26 +2,26 @@
 
 ## 📖 Description
 
-Personal Blogging Platform API เป็นโปรเจค RESTful API ที่พัฒนาโดยใช้ Golang (Fiber Framework) สำหรับจัดการระบบ Blog ส่วนตัว รองรับการทำงาน CRUD (Create, Read, Update, Delete) ของบทความ โดยเชื่อมต่อกับฐานข้อมูล SQL
+Personal Blogging Platform API is a RESTful API built with Golang (Fiber Framework) for managing a personal blogging system. It supports the full set of CRUD operations (Create, Read, Update, Delete) for blog articles and connects to an SQL database.
 
 ### ✨ Features
-- 📚 ดึงรายการบทความทั้งหมด (พร้อม filter ด้วยวันที่หรือ tag)
-- 🔍 ดึงบทความตาม UID
-- ✍️ สร้างบทความใหม่
-- 🗑️ ลบบทความตาม UID
-- ♻️ แก้ไขบทความตาม UID
+- 📚 Retrieve all articles (with filters such as publishing date or tag)
+- 🔍 Retrieve an article by UID
+- ✍️ Create a new article
+- 🗑️ Delete an article by UID
+- ♻️ Update an article by UID
 
 ## 🏗️ API Endpoints
 
 Base Path: /api/v1
 
-| Method | Endpoint        | Description                                               |
-| ------ | --------------- | --------------------------------------------------------- |
-| GET    | `/articles`     | คืนค่ารายการบทความทั้งหมด (รองรับ filter เช่นวันที่, tag) |
-| GET    | `/article/:uid` | คืนค่าบทความเดียวตาม `uid`                                |
-| POST   | `/article`      | สร้างบทความใหม่                                           |
-| DELETE | `/article/:uid` | ลบบทความตาม `uid`                                         |
-| UPDATE | `/article/:uid` | อัพเดทบทความตาม `uid`                                         |
+| Method | Endpoint        | Description                                           |
+| ------ | --------------- | ----------------------------------------------------- |
+| GET    | `/articles`     | Get all articles (supports filters such as date, tag) |
+| GET    | `/article/:uid` | Get a single article by `uid`                         |
+| POST   | `/article`      | Create a new article                                  |
+| DELETE | `/article/:uid` | Delete an article by `uid`                            |
+| PUT    | `/article/:uid` | Update an article by `uid`                            |
 
 ## ⚙️ Installation
 
@@ -32,7 +32,7 @@ git clone https://github.com/saharuth-nu/personal-blog-api-golang.git
 cd personal-blog-api-golang
 ```
 
-2. ติดตั้ง dependency
+2. Install dependencies
 
 ```bash
 go mod tidy
@@ -68,17 +68,18 @@ curl -X GET http://localhost:8080/api/v1/articles
 
 ## 🔑 Environment Variables
 
-สร้างไฟล์ .env ที่ root ของโปรเจค
+Create a .env file at the root of the project:
 
 ```env
 # Example environment variables
-# TODO: เพิ่มรายละเอียดเช่น DB connection, App port ฯลฯ
+# TODO: Add details such as DB connection, App port, etc.
 PORT=8080
 DB_HOST=
 DB_PORT=
 DB_USER=
 DB_PASSWORD=
 DB_NAME=
+JWT_SECRET=
 ```
 
 ## 📂 Project Structure
