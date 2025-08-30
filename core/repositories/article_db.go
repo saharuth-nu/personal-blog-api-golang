@@ -23,6 +23,39 @@ func (r articleRepositoryDB) GetAll() ([]Article, error) {
 	return articles, nil
 }
 
+func (r articleRepositoryDB) GetByCreateAt(articleFilter models.ArticleReqFilter) ([]Article, error) {
+	articles := []Article{}
+	tx := r.db.Order("id").
+		Where("created_at BETWEEN ? AND ?", articleFilter.StartPublishingDate, articleFilter.LastPublishingDate).
+		Find(&articles)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return articles, nil
+}
+
+func (r articleRepositoryDB) GetByTag(articleFilter models.ArticleReqFilter) ([]Article, error) {
+	articles := []Article{}
+	tx := r.db.Order("id").
+		Where("tag = ?", articleFilter.Tag).
+		Find(&articles)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return articles, nil
+}
+
+func (r articleRepositoryDB) GetByFilter(articleFilter models.ArticleReqFilter) ([]Article, error) {
+	articles := []Article{}
+	tx := r.db.Order("id").
+		Where("tag = ? AND created_at BETWEEN ? AND ?", articleFilter.Tag, articleFilter.StartPublishingDate, articleFilter.LastPublishingDate).
+		Find(&articles)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return articles, nil
+}
+
 func (r articleRepositoryDB) GetByUID(uid string) (*Article, error) {
 	article := Article{ArticleUID: uid}
 	tx := r.db.First(&article)

@@ -14,7 +14,7 @@ type ArticleResponse struct {
 }
 
 type ArticleService interface {
-	GetArticles() ([]ArticleResponse, error)
+	GetArticlesByFilter(models.ArticleReqFilter) ([]ArticleResponse, error)
 	GetArticleByUID(string) (*ArticleResponse, error)
 	CreateArticle(models.NewArticleRequest) error
 	DeleteArticleByUID(string) error

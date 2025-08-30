@@ -4,6 +4,7 @@ import (
 	"blog-api/core/models"
 	"blog-api/core/repositories"
 	"errors"
+	"log"
 
 	"github.com/google/uuid"
 )
@@ -16,9 +17,37 @@ func NewArticleService(articleRepo repositories.ArticleRepository) ArticleServic
 	return articleService{articleRepo: articleRepo}
 }
 
-func (s articleService) GetArticles() ([]ArticleResponse, error) {
+func (s articleService) GetArticlesByFilter(articleFilter models.ArticleReqFilter) ([]ArticleResponse, error) {
 
-	articles, err := s.articleRepo.GetAll()
+	filterTag := false
+	filterDate := false
+
+	log.Println(articleFilter.LastPublishingDate)
+	log.Println(articleFilter.StartPublishingDate)
+
+	if !articleFilter.LastPublishingDate.IsZero() && !articleFilter.StartPublishingDate.IsZero() {
+		filterDate = true
+	}
+
+	if articleFilter.Tag != "" {
+		filterTag = true
+	}
+
+	log.Println(filterDate)
+
+	var articles []repositories.Article
+	var err error
+
+	if filterTag && filterDate {
+		articles, err = s.articleRepo.GetByFilter(articleFilter)
+	} else if filterTag {
+		articles, err = s.articleRepo.GetByTag(articleFilter)
+	} else if filterDate {
+		articles, err = s.articleRepo.GetByCreateAt(articleFilter)
+	} else {
+		articles, err = s.articleRepo.GetAll()
+	}
+
 	if err != nil {
 		return nil, err
 	}

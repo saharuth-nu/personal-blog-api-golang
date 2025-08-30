@@ -16,6 +16,9 @@ type Article struct {
 
 type ArticleRepository interface {
 	GetAll() ([]Article, error)
+	GetByCreateAt(models.ArticleReqFilter) ([]Article, error)
+	GetByTag(models.ArticleReqFilter) ([]Article, error)
+	GetByFilter(models.ArticleReqFilter) ([]Article, error)
 	GetByUID(string) (*Article, error)
 	Create(Article) error
 	DeleteByUID(string) error

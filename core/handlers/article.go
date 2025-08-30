@@ -4,6 +4,7 @@ import (
 	"blog-api/core/models"
 	"blog-api/core/services"
 	"blog-api/utils"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,7 +19,15 @@ func NewArticleHandler(articleSrv services.ArticleService) articleHandler {
 
 func (h articleHandler) GetArticles(c *fiber.Ctx) error {
 
-	response, err := h.articleSrv.GetArticles()
+	q := c.Queries()
+
+	filter := models.ArticleReqFilter{
+		Tag:                 q["tag"],
+		StartPublishingDate: ParseDateOrZero(q["start_publishing_date"]),
+		LastPublishingDate:  ParseDateOrZero(q["last_publishing_date"]),
+	}
+
+	response, err := h.articleSrv.GetArticlesByFilter(filter)
 	if err != nil {
 		return utils.ErrorFormat(c, fiber.StatusInternalServerError, err.Error())
 		// return fiber.NewError(fiber.StatusInternalServerError, err.Error())
@@ -123,4 +132,14 @@ func (h articleHandler) UpdateArticleByUID(c *fiber.Ctx) error {
 	// return c.Status(fiber.StatusOK).JSON(response)
 	return utils.SuccessFormat(c, fiber.StatusOK, "success", nil)
 
+}
+
+func ParseDateOrZero(dateStr string) time.Time {
+	// layout ต้องตรงกับ "2006-01-02"
+	t, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		// ถ้า format ไม่ถูกต้อง → return zero value
+		return time.Time{}
+	}
+	return t
 }
