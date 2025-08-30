@@ -88,12 +88,16 @@ personal-blog-api/
 ├── cmd/
 │   └── server/
 │       └── main.go         # Entry point
+├── config/
+│   ├── database            # Database Configuration
+│   ├── environment         # Environment Project
 ├── core/
 │   ├── handlers/           # Controllers / Handlers
 │   ├── models/             # Database models
 │   ├── repositories/       # Data access logic
 │   └── services/           # Business logic
-├── pkg/                    # Utilities / helpers
+├── utils/                  # Utilities / helpers
+│   ├── response            # Http Response
 ├── go.mod
 ├── go.sum
 └── README.md

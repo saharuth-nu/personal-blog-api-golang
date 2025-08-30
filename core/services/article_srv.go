@@ -33,8 +33,6 @@ func (s articleService) GetArticlesByFilter(articleFilter models.ArticleReqFilte
 		filterTag = true
 	}
 
-	log.Println(filterDate)
-
 	var articles []repositories.Article
 	var err error
 
